@@ -8,6 +8,20 @@
             "type": "java",
             "name": "BankAccount",
             "request": "launch",
+            "mainClass": "src.BankAccount",
+            "projectName": "Bank-Account_36ae6dd8"
+        },
+        {
+            "type": "java",
+            "name": "DatabaseConnection",
+            "request": "launch",
+            "mainClass": "src.DatabaseConnection",
+            "projectName": "Bank-Account_36ae6dd8"
+        },
+        {
+            "type": "java",
+            "name": "BankAccount",
+            "request": "launch",
             "mainClass": "BankAccount",
             "projectName": "Bank-Account_36ae6dd8"
         },

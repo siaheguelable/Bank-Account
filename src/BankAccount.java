@@ -1,3 +1,5 @@
+package src;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -8,6 +10,55 @@ public class BankAccount {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Welcome to the Bank Account app!");
+        System.out.println("Are you an Admin or a User?");
+        String userType = scanner.nextLine();
+
+        if (userType.equalsIgnoreCase("Admin")) {
+            // Admin functionalities
+            System.out.println("please enter your admin password: ");
+            String adminPassword = scanner.nextLine();
+            if (adminPassword.equals(Admin.getDefaultAdminPassword())) {
+                System.out.println("Admin access granted.");
+                // Admin-specific actions can be added here
+                System.out.println("List of all users:");
+                for (User user : users) {
+                    System.out.println("Name: " + user.getFirstname() + " " + user.getLastname()
+                            + ", Email: " + user.getEmail() + ", Balance: $" + user.getBalance()
+                            + ", Account Number: " + user.getAccountNumber());
+                }
+
+            } else {
+                System.out.println("Invalid admin password.");
+                // Stop initialization if password is invalid
+            }
+        } else {
+            // User functionalities
+            System.out.println("Please proceed as a User.");
+            // send user info into db
+            System.out.print("Enter your first name: ");
+            String firstname = scanner.nextLine();
+            System.out.print("Enter your last name: ");
+            String lastname = scanner.nextLine();
+            System.out.print("Enter your email: ");
+            String email = scanner.nextLine();
+            System.out.print("Enter your password: ");
+            String userpassword = scanner.nextLine();
+            System.out.print("Please make your first deposit to activate your account: ");
+            double balance = scanner.nextDouble();
+            scanner.nextLine(); // Consume leftover newline
+
+            User newUser = new User(firstname, lastname, email, balance, userpassword);
+            users.add(newUser);
+            // send user info into db
+            Database.saveUser(newUser);
+
+            System.out.println("User registered successfully!");
+
+        }
+        if (users.isEmpty()) {
+            System.out.println("No users registered yet. Please register as a new user.");
+
+        }
 
         boolean running = true;
         while (running) {
@@ -27,14 +78,20 @@ public class BankAccount {
                 System.out.print("Enter your email: ");
                 String email = scanner.nextLine();
 
-                System.out.print("Enter your initial balance: ");
+                System.out.print("Enter your password: ");
+                String userpassword = scanner.nextLine();
+
+                System.out.print("Please make your first deposit to activate your account: ");
                 double balance = scanner.nextDouble();
                 scanner.nextLine(); // Consume leftover newline
 
-                currentUser = new User(firstname, lastname, email, balance);
+                currentUser = new User(firstname, lastname, email, balance, userpassword);
                 users.add(currentUser);
 
                 System.out.println("\nUser created successfully!");
+                System.out.println("Welcome, " + currentUser.getFirstname() + " " + currentUser.getLastname() + " "
+                        + currentUser.getAccountNumber() + "!");
+                System.out.println("Initial Deposit: $" + currentUser.getBalance());
                 System.out.println("Name: " + currentUser.getFirstname() + " " + currentUser.getLastname());
                 System.out.println("Email: " + currentUser.getEmail());
                 System.out.println("Balance: $" + currentUser.getBalance());
@@ -103,7 +160,7 @@ public class BankAccount {
                         if (isAdmin.equalsIgnoreCase("yes")) {
                             System.out.print("Kindly enter your admin password: ");
                             String adminPassword = scanner.nextLine();
-                            if (adminPassword.equals("admin123")) {
+                            if (adminPassword.equals(Admin.getDefaultAdminPassword())) {
                                 System.out.println("Admin access granted.");
                                 // Admin-specific actions can be added here
                                 System.out.println("List of all users:");
